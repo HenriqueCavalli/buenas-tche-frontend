@@ -6,9 +6,9 @@ import { useSocket } from "../../hooks/useSocket";
 import UserList from "../../components/UserList";
 import ChatBox from "../../components/ChatBox";
 import MessageInput from "../../components/MessageInput";
-import Notification from "../../components/Notification";
 import api from "../../services/api";
 import ProtectedRoute from "../../components/ProtectedRoute";
+import Swal from "sweetalert2";
 
 interface User {
 	_id: string;
@@ -31,19 +31,21 @@ const ChatPage = () => {
 	const [users, setUsers] = useState<User[]>([]);
 	const [selectedUser, setSelectedUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
-	const [notification, setNotification] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (socket) {
 			socket.on("receiveMessage", (message: Message) => {
-				if (
-					selectedUser &&
-					(message.sender._id === selectedUser._id ||
-						message.receiver._id === selectedUser._id)
-				) {
+				if (selectedUser && message.sender._id === selectedUser._id) {
 					setMessages((prev) => [...prev, message]);
 				} else {
-					setNotification(`Nova mensagem de ${message.sender.name}`);
+					Swal.fire({
+						toast: true,
+						position: "top-end",
+						icon: "info",
+						title: `Nova mensagem de ${message.sender.name}`,
+						showConfirmButton: false,
+						timer: 3000,
+					});
 				}
 			});
 
@@ -64,6 +66,15 @@ const ChatPage = () => {
 			setUsers(response.data);
 		} catch (error) {
 			console.error("Erro ao buscar usuários:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Erro",
+				text: "Não foi possível buscar a lista de usuários.",
+				toast: true,
+				position: "top-end",
+				showConfirmButton: false,
+				timer: 3000,
+			});
 		}
 	};
 
@@ -75,7 +86,6 @@ const ChatPage = () => {
 
 	const handleSelectUser = async (user: User) => {
 		setSelectedUser(user);
-		setNotification(null);
 		try {
 			const response = await api.get(`/messages/${user._id}`);
 			setMessages(response.data.messages.reverse());
@@ -84,6 +94,15 @@ const ChatPage = () => {
 			}
 		} catch (error) {
 			console.error("Erro ao buscar mensagens:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Erro",
+				text: "Não foi possível buscar as mensagens.",
+				toast: true,
+				position: "top-end",
+				showConfirmButton: false,
+				timer: 3000,
+			});
 		}
 	};
 
@@ -105,10 +124,23 @@ const ChatPage = () => {
 		}
 	};
 
+	const handleLeaveChat = () => {
+		setSelectedUser(null);
+		setMessages([]);
+	};
+
 	return (
 		<ProtectedRoute>
 			<div className="flex h-screen">
-				<UserList onSelectUser={handleSelectUser} />
+				<div className="flex flex-col p-4 border-r h-full w-1/4">
+					<UserList onSelectUser={handleSelectUser} />
+					<button
+						onClick={logout}
+						className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors duration-300"
+					>
+						Sair
+					</button>
+				</div>
 				<div className="flex-1 flex flex-col">
 					{selectedUser ? (
 						<>
@@ -118,10 +150,10 @@ const ChatPage = () => {
 									{selectedUser.username})
 								</h2>
 								<button
-									onClick={logout}
-									className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+									onClick={handleLeaveChat}
+									className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-colors duration-300"
 								>
-									Sair
+									Sair da conversa
 								</button>
 							</div>
 							<ChatBox messages={messages} currentUser={user} />
@@ -130,12 +162,11 @@ const ChatPage = () => {
 					) : (
 						<div className="flex-1 flex items-center justify-center">
 							<h2 className="text-2xl text-gray-500">
-								Selecione um usuário para iniciar o chat
+								Selecione um usuário para iniciar a conversa
 							</h2>
 						</div>
 					)}
 				</div>
-				{notification && <Notification message={notification} />}
 			</div>
 		</ProtectedRoute>
 	);

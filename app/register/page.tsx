@@ -3,20 +3,38 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 export default function RegisterPage() {
 	const { register } = useContext(AuthContext);
 	const [name, setName] = useState("");
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const [error, setError] = useState<string | null>(null);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
 			await register(name, username, password);
+			Swal.fire({
+				position: "top-end",
+				icon: "success",
+				title: "Registro bem-sucedido!",
+				showConfirmButton: false,
+				timer: 2000,
+				toast: true,
+			});
 		} catch (err: any) {
-			setError(err.message);
+			Swal.fire({
+				position: "top-end",
+
+				icon: "error",
+				title: err.message || "Erro no Cadastro",
+
+				showConfirmButton: false,
+
+				timer: 3000,
+				toast: true,
+			});
 		}
 	};
 
@@ -27,11 +45,6 @@ export default function RegisterPage() {
 				className="bg-white p-6 rounded shadow-md w-full max-w-sm"
 			>
 				<h2 className="text-2xl mb-4 text-center">Registrar</h2>
-				{error && (
-					<div className="bg-red-100 text-red-700 p-2 mb-4 rounded">
-						{error}
-					</div>
-				)}
 				<div className="mb-4">
 					<label className="block mb-1">Nome</label>
 					<input

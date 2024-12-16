@@ -35,7 +35,6 @@ const ChatPage = () => {
 
 	useEffect(() => {
 		if (socket) {
-
 			socket.on("receiveMessage", (message: Message) => {
 				if (
 					selectedUser &&
@@ -47,7 +46,6 @@ const ChatPage = () => {
 					setNotification(`Nova mensagem de ${message.sender.name}`);
 				}
 			});
-
 
 			socket.on("updateUserList", () => {
 				fetchUsers();
@@ -81,6 +79,9 @@ const ChatPage = () => {
 		try {
 			const response = await api.get(`/messages/${user._id}`);
 			setMessages(response.data.messages.reverse());
+			if (socket && isConnected) {
+				socket.emit("joinConversation", { otherUserId: user._id });
+			}
 		} catch (error) {
 			console.error("Erro ao buscar mensagens:", error);
 		}

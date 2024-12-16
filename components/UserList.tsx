@@ -29,7 +29,7 @@ const UserList: React.FC<UserListProps> = ({ onSelectUser }) => {
 	useEffect(() => {
 		fetchUsers();
 
-		const interval = setInterval(fetchUsers, 5000);
+		const interval = setInterval(fetchUsers, 4000);
 
 		return () => clearInterval(interval);
 	}, []);

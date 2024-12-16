@@ -17,12 +17,10 @@ export const useSocket = (token: string | null) => {
 
 			socket.on("connect", () => {
 				setIsConnected(true);
-				console.log("Conectado ao Socket.io");
 			});
 
 			socket.on("disconnect", () => {
 				setIsConnected(false);
-				console.log("Desconectado do Socket.io");
 			});
 		}
 

@@ -6,15 +6,21 @@ import { AuthContext } from "../context/AuthContext";
 
 const Home = () => {
 	const router = useRouter();
-	const { isAuthenticated } = useContext(AuthContext);
+	const { isAuthenticated, loading } = useContext(AuthContext);
 
 	useEffect(() => {
-		if (isAuthenticated) {
-			router.push("/chat");
-		} else {
-			router.push("/login");
+		if (!loading) {
+			if (isAuthenticated) {
+				router.push("/chat");
+			} else {
+				router.push("/login");
+			}
 		}
-	}, [isAuthenticated, router]);
+	}, [isAuthenticated, loading, router]);
+
+	if (loading) {
+		return <div>Carregando...</div>;
+	}
 
 	return null;
 };

@@ -45,7 +45,7 @@ Antes de começar, certifique-se de que você tenha instalado:
 
 4. **Acesse no Navegador**
 
-    Abra [http://localhost:3000](http://localhost:3000) no seu navegador para visualizar o resultado.
+    Abra [http://localhost:3000](http://localhost:3000) no seu navegador para visualizar o resultado, caso a porta ja esteja alocada, vai abrir em outra, tome cuidado com as portas no .env para evitar erros de conexão.
 
 ---
 

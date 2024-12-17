@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# buenas-tche-frontend
 
-## Getting Started
+Bem-vindo ao **buenas-tche-frontend**, a interface web do projeto **Buenas, tchê!**, desenvolvida utilizando **Next.js 14**. O projeto prioriza performance, escalabilidade e integração com o backend em tempo real.
 
-First, run the development server:
+## 🚀 Tecnologias Utilizadas
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js 14**: Framework React moderno para aplicações web.
+- **React 18**: Biblioteca JavaScript para criação de interfaces de usuário.
+- **Node.js 20**: Versão recomendada do Node.js para execução do projeto.
+- **Socket.io**: Biblioteca para comunicação em tempo real via WebSockets.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Pré-requisitos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Antes de começar, certifique-se de que você tenha instalado:
 
-## Learn More
+- **Node.js 20** ou superior: [Baixe aqui](https://nodejs.org).
+- **npm** (gerenciador de pacotes).
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Como Iniciar o Projeto
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone o Repositório**
 
-## Deploy on Vercel
+    ```bash
+    git clone https://github.com/seu-usuario/buenas-tche-frontend.git
+    cd buenas-tche-frontend
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Instale as Dependências**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    Use o gerenciador de pacotes da sua preferência:
+
+    ```bash
+    npm install
+    ```
+
+3. **Inicie o Servidor de Desenvolvimento**
+
+    ```bash
+    npm run dev
+    ```
+
+4. **Acesse no Navegador**
+
+    Abra [http://localhost:3000](http://localhost:3000) no seu navegador para visualizar o resultado.
+
+---
+
+## 📄 Estrutura do Projeto
+
+- O arquivo principal da aplicação fica em `app/page.tsx`.
+- Todas as alterações feitas na interface serão automaticamente refletidas no navegador em tempo real.
+
+---
+
+_Desenvolvido por [Henrique Cavalli](https://github.com/HenriqueCavalli)_

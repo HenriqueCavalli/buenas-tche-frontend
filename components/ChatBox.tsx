@@ -12,7 +12,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ messages, currentUser }) => {
 	const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
+		endOfMessagesRef.current?.scrollIntoView({ behavior: "auto" });
 	}, [messages]);
 
 	return (

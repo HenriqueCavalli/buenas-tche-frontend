@@ -15,6 +15,7 @@ interface User {
 	name: string;
 	username: string;
 	online: boolean;
+	unreadCount: number;
 }
 
 interface Message {
@@ -28,7 +29,6 @@ interface Message {
 const ChatPage = () => {
 	const { token, logout, user } = useContext(AuthContext);
 	const { socket, isConnected } = useSocket(token);
-	const [users, setUsers] = useState<User[]>([]);
 	const [selectedUser, setSelectedUser] = useState<User | null>(null);
 	const [messages, setMessages] = useState<Message[]>([]);
 
@@ -49,40 +49,11 @@ const ChatPage = () => {
 				}
 			});
 
-			socket.on("updateUserList", () => {
-				fetchUsers();
-			});
-
 			return () => {
 				socket.off("receiveMessage");
-				socket.off("updateUserList");
 			};
 		}
 	}, [socket, selectedUser]);
-
-	const fetchUsers = async () => {
-		try {
-			const response = await api.get("/users");
-			setUsers(response.data);
-		} catch (error) {
-			console.error("Erro ao buscar usuários:", error);
-			Swal.fire({
-				icon: "error",
-				title: "Erro",
-				text: "Não foi possível buscar a lista de usuários.",
-				toast: true,
-				position: "top-end",
-				showConfirmButton: false,
-				timer: 3000,
-			});
-		}
-	};
-
-	useEffect(() => {
-		if (isConnected) {
-			fetchUsers();
-		}
-	}, [isConnected]);
 
 	const handleSelectUser = async (user: User) => {
 		setSelectedUser(user);
@@ -131,24 +102,42 @@ const ChatPage = () => {
 
 	return (
 		<ProtectedRoute>
-			<div className="flex h-screen">
-				<div className="flex flex-col p-4 border-r h-full w-1/4">
-					<UserList onSelectUser={handleSelectUser} />
-					<button
-						onClick={logout}
-						className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors duration-300"
-					>
-						Sair
-					</button>
+			<div className="flex h-screen bg-gray-100">
+				<div className="flex flex-col bg-white shadow-md w-full md:w-1/4 lg:w-1/5">
+					<div className="flex-1 overflow-y-auto">
+						<UserList onSelectUser={handleSelectUser} />
+					</div>
+					<div className="p-4 ">
+						<button
+							onClick={logout}
+							className="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors duration-300"
+						>
+							Sair
+						</button>
+					</div>
 				</div>
+
 				<div className="flex-1 flex flex-col">
 					{selectedUser ? (
 						<>
-							<div className="p-4 border-b flex justify-between items-center">
-								<h2 className="text-xl">
-									Conversando com {selectedUser.name} (
-									{selectedUser.username})
-								</h2>
+							<div className="p-4 bg-white shadow-md flex justify-between items-center border-b">
+								<div>
+									<h2 className="text-xl font-semibold text-gray-800">
+										Conversando com {selectedUser.name} (@
+										{selectedUser.username})
+									</h2>
+									<span
+										className={`text-sm ${
+											selectedUser.online
+												? "text-green-500"
+												: "text-gray-500"
+										}`}
+									>
+										{selectedUser.online
+											? "Online"
+											: "Offline"}
+									</span>
+								</div>
 								<button
 									onClick={handleLeaveChat}
 									className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-colors duration-300"
@@ -156,11 +145,20 @@ const ChatPage = () => {
 									Sair da conversa
 								</button>
 							</div>
-							<ChatBox messages={messages} currentUser={user} />
-							<MessageInput onSend={handleSendMessage} />
+
+							<div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+								<ChatBox
+									messages={messages}
+									currentUser={user}
+								/>
+							</div>
+
+							<div className="p-4 bg-white">
+								<MessageInput onSend={handleSendMessage} />
+							</div>
 						</>
 					) : (
-						<div className="flex-1 flex items-center justify-center">
+						<div className="flex-1 flex items-center justify-center bg-gray-100">
 							<h2 className="text-2xl text-gray-500">
 								Selecione um usuário para iniciar a conversa
 							</h2>

@@ -15,9 +15,10 @@ interface User {
 
 interface UserListProps {
 	onSelectUser: (user: User) => void;
+    selectedUser: any
 }
 
-const UserList: React.FC<UserListProps> = ({ onSelectUser }) => {
+const UserList: React.FC<UserListProps> = ({ onSelectUser, selectedUser }) => {
 	const [users, setUsers] = useState<User[]>([]);
 	const { user: currentUser, token } = useContext(AuthContext);
 	const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -43,6 +44,18 @@ const UserList: React.FC<UserListProps> = ({ onSelectUser }) => {
 			};
 		}
 	}, [socket]);
+
+	useEffect(() => {
+        if (!selectedUser) {
+            setSelectedUserId(null);
+            setUsers((prevUsers) =>
+                prevUsers.map((user) => ({ ...user, unreadCount: 0 }))
+            );
+        } else {
+            setSelectedUserId(selectedUser._id);
+        }
+    }, [selectedUser]);
+       
 
 	const handleSelectUser = (user: User) => {
 		setSelectedUserId(user._id);

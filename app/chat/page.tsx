@@ -105,7 +105,7 @@ const ChatPage = () => {
 			<div className="flex h-screen bg-gray-100">
 				<div className="flex flex-col bg-white shadow-md w-full md:w-1/4 lg:w-1/5">
 					<div className="flex-1 overflow-y-auto">
-						<UserList onSelectUser={handleSelectUser} />
+						<UserList onSelectUser={handleSelectUser} selectedUser={selectedUser} />
 					</div>
 					<div className="p-4 ">
 						<button
